@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Paraminter.Associators.Syntactic.CSharp.Type.Corus.Services</AssemblyName>
+        
+        <PackageId>Paraminter.Associators.Syntactic.CSharp.Type.Corus.Services</PackageId>
+        <Description>Provides general implementations of services related to a Paraminter associator specialized in syntactic data about C# type arguments.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Paraminter.Associators.Queries" />
+        <PackageReference Include="Paraminter.Associators.Syntactic.CSharp.Type.Queries.Collectors" />
+        <PackageReference Include="Paraminter.Queries.Handlers" />
+
+        <ProjectReference Include="$(SolutionDir)\src\Queries\Queries.csproj" />
+    </ItemGroup>
+
+</Project>

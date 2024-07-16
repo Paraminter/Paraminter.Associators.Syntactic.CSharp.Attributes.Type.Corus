@@ -11,17 +11,50 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{738DF42C-D4A2-4141-B2DE-590571402875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "src\Queries\Queries.csproj", "{4883D988-755F-482A-AE60-F5AB15E6D67F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "src\Services\Services.csproj", "{39218B11-F646-465D-AAFE-06BA65E20AA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F1243CCB-DC39-4196-9304-E2EBCA92AA69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{B57AA6CA-5184-4A1C-B545-EB5C76291BB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{58FC9A4F-B432-440C-A055-3A7404A55D46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntacticCSharpTypeInvocationDataAssociator", "tests\unit\Services\SyntacticCSharpTypeInvocationDataAssociator\SyntacticCSharpTypeInvocationDataAssociator.csproj", "{1A964721-D02F-41C5-B874-92F8ADA18529}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4883D988-755F-482A-AE60-F5AB15E6D67F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4883D988-755F-482A-AE60-F5AB15E6D67F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4883D988-755F-482A-AE60-F5AB15E6D67F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4883D988-755F-482A-AE60-F5AB15E6D67F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39218B11-F646-465D-AAFE-06BA65E20AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39218B11-F646-465D-AAFE-06BA65E20AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39218B11-F646-465D-AAFE-06BA65E20AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39218B11-F646-465D-AAFE-06BA65E20AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A964721-D02F-41C5-B874-92F8ADA18529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A964721-D02F-41C5-B874-92F8ADA18529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A964721-D02F-41C5-B874-92F8ADA18529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A964721-D02F-41C5-B874-92F8ADA18529}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03179225-A3B7-47F2-BED2-FFC518DCFD28}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4883D988-755F-482A-AE60-F5AB15E6D67F} = {738DF42C-D4A2-4141-B2DE-590571402875}
+		{39218B11-F646-465D-AAFE-06BA65E20AA2} = {738DF42C-D4A2-4141-B2DE-590571402875}
+		{B57AA6CA-5184-4A1C-B545-EB5C76291BB8} = {F1243CCB-DC39-4196-9304-E2EBCA92AA69}
+		{58FC9A4F-B432-440C-A055-3A7404A55D46} = {B57AA6CA-5184-4A1C-B545-EB5C76291BB8}
+		{1A964721-D02F-41C5-B874-92F8ADA18529} = {58FC9A4F-B432-440C-A055-3A7404A55D46}
 	EndGlobalSection
 EndGlobal
