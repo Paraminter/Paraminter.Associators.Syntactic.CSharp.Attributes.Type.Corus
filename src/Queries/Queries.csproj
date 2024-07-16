@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Paraminter.Associators.Syntactic.CSharp.Type.Corus.Queries</AssemblyName>
+
+        <RootNamespace>Paraminter.Associators.Syntactic.CSharp.Type.Corus.Queries</RootNamespace>
+        
+        <PackageId>Paraminter.Associators.Syntactic.CSharp.Type.Corus.Queries</PackageId>
+        <Description>Defines queries related to a Paraminter associator specialized in syntactic data about C# type arguments.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    </ItemGroup>
+
+</Project>
