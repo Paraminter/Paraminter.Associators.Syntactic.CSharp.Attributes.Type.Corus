@@ -9,8 +9,8 @@
 
         <Owners>Paraminter</Owners>
         <Authors>ErikWe</Authors>
-        <PackageProjectUrl>https://github.com/Paraminter/Paraminter.Associators.Syntactic.CSharp.Attributes.Type.Corus</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Paraminter/Paraminter.Associators.Syntactic.CSharp.Attributes.Type.Corus</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Paraminter/Paraminter.Associators.Syntactic.CSharp.Type.Corus</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Paraminter/Paraminter.Associators.Syntactic.CSharp.Type.Corus</RepositoryUrl>
         <PackageReadmeFile>README.nupkg.md</PackageReadmeFile>
         <PackageIcon>Logo.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
