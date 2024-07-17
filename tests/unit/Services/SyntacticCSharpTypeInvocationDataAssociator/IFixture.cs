@@ -1,8 +1,8 @@
-﻿namespace Paraminter.Associators.Syntactic.CSharp.Type.Corus;
+﻿namespace Paraminter.CSharp.Type.Corus;
 
 using Paraminter.Associators.Queries;
-using Paraminter.Associators.Syntactic.CSharp.Type.Corus.Queries;
-using Paraminter.Associators.Syntactic.CSharp.Type.Queries.Collectors;
+using Paraminter.CSharp.Type.Corus.Queries;
+using Paraminter.CSharp.Type.Queries.Collectors;
 using Paraminter.Queries.Handlers;
 
 internal interface IFixture

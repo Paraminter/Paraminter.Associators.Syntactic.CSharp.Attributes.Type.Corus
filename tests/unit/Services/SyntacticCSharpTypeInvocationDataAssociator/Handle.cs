@@ -1,4 +1,4 @@
-﻿namespace Paraminter.Associators.Syntactic.CSharp.Type.Corus;
+﻿namespace Paraminter.CSharp.Type.Corus;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,8 +7,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Moq;
 
 using Paraminter.Associators.Queries;
-using Paraminter.Associators.Syntactic.CSharp.Type.Corus.Queries;
-using Paraminter.Associators.Syntactic.CSharp.Type.Queries.Collectors;
+using Paraminter.CSharp.Type.Corus.Queries;
+using Paraminter.CSharp.Type.Queries.Collectors;
 
 using System;
 

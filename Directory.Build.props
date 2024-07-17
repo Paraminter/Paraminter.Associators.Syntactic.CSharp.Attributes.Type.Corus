@@ -3,7 +3,7 @@
     <PropertyGroup>
         <LangVersion>12</LangVersion>
 
-        <RootNamespace>Paraminter.Associators.Syntactic.CSharp.Type.Corus</RootNamespace>
+        <RootNamespace>Paraminter.CSharp.Type.Corus</RootNamespace>
 
         <Nullable>enable</Nullable>
         <AnalysisMode>all</AnalysisMode>
