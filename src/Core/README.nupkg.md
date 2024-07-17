@@ -1,4 +1,4 @@
-# Paraminter.CSharp.Type.Corus.Queries.Collectors
+# Paraminter.CSharp.Type.Corus
 
 Provides general implementations of services related to a `Paraminter` associator specialized in syntactic C# type arguments.
 

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <AssemblyName>Paraminter.CSharp.Type.Corus.Services</AssemblyName>
+        <AssemblyName>Paraminter.CSharp.Type.Corus</AssemblyName>
         
-        <PackageId>Paraminter.CSharp.Type.Corus.Services</PackageId>
+        <PackageId>Paraminter.CSharp.Type.Corus</PackageId>
         <Description>Provides general implementations of services related to a Paraminter associator specialized in syntactic C# type arguments.</Description>
     </PropertyGroup>
 
