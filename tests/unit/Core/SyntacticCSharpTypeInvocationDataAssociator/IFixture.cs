@@ -7,5 +7,5 @@ using Paraminter.Queries.Handlers;
 
 internal interface IFixture
 {
-    public abstract IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, ISyntacticCSharpTypeInvocationDataAssociatorQueryResponseCollector> Sut { get; }
+    public abstract IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> Sut { get; }
 }
