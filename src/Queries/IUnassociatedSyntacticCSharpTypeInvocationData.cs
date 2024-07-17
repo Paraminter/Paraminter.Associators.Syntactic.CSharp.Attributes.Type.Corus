@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using System.Collections.Generic;
 
-/// <summary>Represents unassociated syntactic data about C# type arguments and C# type parameters.</summary>
+/// <summary>Represents unassociated syntactic C# type arguments of an invocation.</summary>
 public interface IUnassociatedSyntacticCSharpTypeInvocationData
 {
     /// <summary>The type parameters of the invocation.</summary>
