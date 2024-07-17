@@ -7,16 +7,16 @@ using Paraminter.Queries.Handlers;
 
 using System;
 
-/// <summary>Associates syntactic data about C# type arguments and C# type parameters.</summary>
+/// <summary>Associates syntactic C# type arguments.</summary>
 public sealed class SyntacticCSharpTypeInvocationDataAssociator
-    : IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, ISyntacticCSharpTypeInvocationDataAssociatorQueryResponseCollector>
+    : IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
 {
-    /// <summary>Instantiates a <see cref="SyntacticCSharpTypeInvocationDataAssociator"/>, associating syntactic data about C# type arguments and C# type parameters.</summary>
+    /// <summary>Instantiates a <see cref="SyntacticCSharpTypeInvocationDataAssociator"/>, associating syntactic C# type arguments.</summary>
     public SyntacticCSharpTypeInvocationDataAssociator() { }
 
-    void IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, ISyntacticCSharpTypeInvocationDataAssociatorQueryResponseCollector>.Handle(
+    void IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
         IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
-        ISyntacticCSharpTypeInvocationDataAssociatorQueryResponseCollector queryResponseCollector)
+        IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
     {
         if (query is null)
         {
