@@ -1,4 +1,4 @@
-﻿namespace Paraminter.Associators.Syntactic.CSharp.Type.Corus;
+﻿namespace Paraminter.CSharp.Type.Corus;
 
 using Xunit;
 
