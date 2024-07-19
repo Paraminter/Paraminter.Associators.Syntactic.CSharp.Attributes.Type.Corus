@@ -9,13 +9,13 @@ using System;
 
 /// <summary>Associates syntactic C# type arguments.</summary>
 public sealed class SyntacticCSharpTypeInvocationDataAssociator
-    : IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
+    : IQueryHandler<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
 {
     /// <summary>Instantiates a <see cref="SyntacticCSharpTypeInvocationDataAssociator"/>, associating syntactic C# type arguments.</summary>
     public SyntacticCSharpTypeInvocationDataAssociator() { }
 
-    void IQueryHandler<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
-        IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
+    void IQueryHandler<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
+        IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
         IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
     {
         if (query is null)
@@ -28,17 +28,17 @@ public sealed class SyntacticCSharpTypeInvocationDataAssociator
             throw new ArgumentNullException(nameof(queryResponseCollector));
         }
 
-        if (query.UnassociatedInvocationData.Parameters.Count != query.UnassociatedInvocationData.SyntacticArguments.Count)
+        if (query.Data.Parameters.Count != query.Data.SyntacticArguments.Count)
         {
             queryResponseCollector.Invalidator.Invalidate();
 
             return;
         }
 
-        for (var i = 0; i < query.UnassociatedInvocationData.Parameters.Count; i++)
+        for (var i = 0; i < query.Data.Parameters.Count; i++)
         {
-            var parameter = query.UnassociatedInvocationData.Parameters[i];
-            var argumentData = query.UnassociatedInvocationData.SyntacticArguments[i];
+            var parameter = query.Data.Parameters[i];
+            var argumentData = query.Data.SyntacticArguments[i];
 
             queryResponseCollector.Associations.Add(parameter, argumentData);
         }

@@ -43,11 +43,11 @@ public sealed class Handle
         var methodInvocation = invokeMethod.DescendantNodes().OfType<InvocationExpressionSyntax>().Single();
         var syntacticArguments = methodInvocation.DescendantNodes().OfType<TypeArgumentListSyntax>().Single().Arguments;
 
-        Mock<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
+        Mock<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
         Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
-        queryMock.Setup((query) => query.UnassociatedInvocationData.Parameters).Returns(method.TypeParameters);
-        queryMock.Setup((query) => query.UnassociatedInvocationData.SyntacticArguments).Returns(syntacticArguments);
+        queryMock.Setup((query) => query.Data.Parameters).Returns(method.TypeParameters);
+        queryMock.Setup((query) => query.Data.SyntacticArguments).Returns(syntacticArguments);
 
         Target(queryMock.Object, queryResponseCollectorMock.Object);
 
@@ -58,7 +58,7 @@ public sealed class Handle
     }
 
     private void Target(
-        IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
+        IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
         IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
     {
         Fixture.Sut.Handle(query, queryResponseCollector);

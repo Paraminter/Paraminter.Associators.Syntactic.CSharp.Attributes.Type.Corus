@@ -29,7 +29,7 @@ public sealed class Handle
     [Fact]
     public void NullQueryResponseCollector_ThrowsArgumentNullException()
     {
-        var result = Record.Exception(() => Target(Mock.Of<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>>(), null!));
+        var result = Record.Exception(() => Target(Mock.Of<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>>(), null!));
 
         Assert.IsType<ArgumentNullException>(result);
     }
@@ -37,11 +37,11 @@ public sealed class Handle
     [Fact]
     public void DifferentNumberOfParametersAndSyntacticArguments_Invalidates()
     {
-        Mock<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
+        Mock<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
         Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
-        queryMock.Setup(static (query) => query.UnassociatedInvocationData.Parameters).Returns([]);
-        queryMock.Setup(static (query) => query.UnassociatedInvocationData.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
+        queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
+        queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
 
         Target(queryMock.Object, queryResponseCollectorMock.Object);
 
@@ -51,11 +51,11 @@ public sealed class Handle
     [Fact]
     public void NoParametersOrSyntacticArguments_AddsNone()
     {
-        Mock<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
+        Mock<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
         Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
-        queryMock.Setup(static (query) => query.UnassociatedInvocationData.Parameters).Returns([]);
-        queryMock.Setup(static (query) => query.UnassociatedInvocationData.SyntacticArguments).Returns([]);
+        queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
+        queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([]);
 
         Target(queryMock.Object, queryResponseCollectorMock.Object);
 
@@ -72,11 +72,11 @@ public sealed class Handle
         var syntacticArgument1 = SyntaxFactory.ParseTypeName("int");
         var syntacticArgument2 = SyntaxFactory.ParseTypeName("float");
 
-        Mock<IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
+        Mock<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>> queryMock = new();
         Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
-        queryMock.Setup((query) => query.UnassociatedInvocationData.Parameters).Returns([parameter1, parameter2]);
-        queryMock.Setup((query) => query.UnassociatedInvocationData.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
+        queryMock.Setup((query) => query.Data.Parameters).Returns([parameter1, parameter2]);
+        queryMock.Setup((query) => query.Data.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
 
         Target(queryMock.Object, queryResponseCollectorMock.Object);
 
@@ -87,7 +87,7 @@ public sealed class Handle
     }
 
     private void Target(
-        IGetAssociatedInvocationDataQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
+        IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
         IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
     {
         Fixture.Sut.Handle(query, queryResponseCollector);
