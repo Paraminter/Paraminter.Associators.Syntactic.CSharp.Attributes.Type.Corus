@@ -8,14 +8,14 @@ using Paraminter.Queries.Handlers;
 using System;
 
 /// <summary>Associates syntactic C# type arguments.</summary>
-public sealed class SyntacticCSharpTypeInvocationDataAssociator
-    : IQueryHandler<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
+public sealed class SyntacticCSharpTypeAssociator
+    : IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
 {
-    /// <summary>Instantiates a <see cref="SyntacticCSharpTypeInvocationDataAssociator"/>, associating syntactic C# type arguments.</summary>
-    public SyntacticCSharpTypeInvocationDataAssociator() { }
+    /// <summary>Instantiates a <see cref="SyntacticCSharpTypeAssociator"/>, associating syntactic C# type arguments.</summary>
+    public SyntacticCSharpTypeAssociator() { }
 
-    void IQueryHandler<IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
-        IAssociateArgumentsQuery<IUnassociatedSyntacticCSharpTypeInvocationData> query,
+    void IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
+        IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
         IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
     {
         if (query is null)
