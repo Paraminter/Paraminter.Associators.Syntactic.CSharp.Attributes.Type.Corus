@@ -12,5 +12,5 @@ public sealed class Constructor
         Assert.NotNull(result);
     }
 
-    private static SyntacticCSharpTypeInvocationDataAssociator Target() => new();
+    private static SyntacticCSharpTypeAssociator Target() => new();
 }
