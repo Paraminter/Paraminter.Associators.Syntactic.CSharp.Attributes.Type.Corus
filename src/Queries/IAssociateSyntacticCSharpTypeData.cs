@@ -11,6 +11,6 @@ public interface IAssociateSyntacticCSharpTypeData
     /// <summary>The type parameters.</summary>
     public abstract IReadOnlyList<ITypeParameterSymbol> Parameters { get; }
 
-    /// <summary>The syntactic type arguments.</summary>
+    /// <summary>The syntactic C# type arguments.</summary>
     public abstract IReadOnlyList<TypeSyntax> SyntacticArguments { get; }
 }

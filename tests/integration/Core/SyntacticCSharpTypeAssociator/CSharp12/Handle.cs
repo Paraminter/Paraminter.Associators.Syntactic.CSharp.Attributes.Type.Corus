@@ -39,7 +39,7 @@ public sealed class Handle
         var syntacticArguments = compilation.SyntaxTrees[0].GetRoot().DescendantNodes().OfType<TypeArgumentListSyntax>().Single().Arguments;
 
         Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
         queryMock.Setup((query) => query.Data.Parameters).Returns(target.TypeParameters);
         queryMock.Setup((query) => query.Data.SyntacticArguments).Returns(syntacticArguments);
@@ -56,7 +56,7 @@ public sealed class Handle
 
     private void Target(
         IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
-        IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
+        IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector queryResponseCollector)
     {
         Fixture.Sut.Handle(query, queryResponseCollector);
     }

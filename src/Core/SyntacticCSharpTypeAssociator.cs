@@ -9,14 +9,14 @@ using System;
 
 /// <summary>Associates syntactic C# type arguments.</summary>
 public sealed class SyntacticCSharpTypeAssociator
-    : IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>
+    : IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector>
 {
     /// <summary>Instantiates a <see cref="SyntacticCSharpTypeAssociator"/>, associating syntactic C# type arguments.</summary>
     public SyntacticCSharpTypeAssociator() { }
 
-    void IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>.Handle(
+    void IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector>.Handle(
         IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
-        IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
+        IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector queryResponseCollector)
     {
         if (query is null)
         {
@@ -38,9 +38,9 @@ public sealed class SyntacticCSharpTypeAssociator
         for (var i = 0; i < query.Data.Parameters.Count; i++)
         {
             var parameter = query.Data.Parameters[i];
-            var argumentData = query.Data.SyntacticArguments[i];
+            var syntacticArgument = query.Data.SyntacticArguments[i];
 
-            queryResponseCollector.Associations.Add(parameter, argumentData);
+            queryResponseCollector.Associations.Add(parameter, syntacticArgument);
         }
     }
 }

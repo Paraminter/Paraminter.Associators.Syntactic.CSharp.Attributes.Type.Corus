@@ -21,7 +21,7 @@ public sealed class Handle
     [Fact]
     public void NullQuery_ThrowsArgumentNullException()
     {
-        var result = Record.Exception(() => Target(null!, Mock.Of<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector>()));
+        var result = Record.Exception(() => Target(null!, Mock.Of<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector>()));
 
         Assert.IsType<ArgumentNullException>(result);
     }
@@ -38,7 +38,7 @@ public sealed class Handle
     public void DifferentNumberOfParametersAndSyntacticArguments_Invalidates()
     {
         Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
         queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
         queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
@@ -52,7 +52,7 @@ public sealed class Handle
     public void NoParametersOrSyntacticArguments_AddsNone()
     {
         Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
         queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
         queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([]);
@@ -73,7 +73,7 @@ public sealed class Handle
         var syntacticArgument2 = SyntaxFactory.ParseTypeName("float");
 
         Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> queryResponseCollectorMock = new() { DefaultValue = DefaultValue.Mock };
 
         queryMock.Setup((query) => query.Data.Parameters).Returns([parameter1, parameter2]);
         queryMock.Setup((query) => query.Data.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
@@ -88,7 +88,7 @@ public sealed class Handle
 
     private void Target(
         IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
-        IInvalidatingSyntacticCSharpTypeAssociationQueryResponseCollector queryResponseCollector)
+        IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector queryResponseCollector)
     {
         Fixture.Sut.Handle(query, queryResponseCollector);
     }
