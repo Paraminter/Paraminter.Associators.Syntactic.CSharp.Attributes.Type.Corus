@@ -2,7 +2,7 @@
 
 using Paraminter.Associators.Queries;
 using Paraminter.CSharp.Type.Corus.Queries;
-using Paraminter.CSharp.Type.Queries.Collectors;
+using Paraminter.CSharp.Type.Queries.Handlers;
 using Paraminter.Queries.Handlers;
 
 internal static class FixtureFactory
@@ -17,14 +17,14 @@ internal static class FixtureFactory
     private sealed class Fixture
         : IFixture
     {
-        private readonly IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> Sut;
+        private readonly IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> Sut;
 
         public Fixture(
-            IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> sut)
+            IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> sut)
         {
             Sut = sut;
         }
 
-        IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseCollector> IFixture.Sut => Sut;
+        IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> IFixture.Sut => Sut;
     }
 }
