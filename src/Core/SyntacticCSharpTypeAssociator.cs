@@ -1,49 +1,48 @@
 ﻿namespace Paraminter.CSharp.Type.Corus;
 
-using Paraminter.Associators.Queries;
+using Paraminter.Associators.Commands;
+using Paraminter.Commands.Handlers;
+using Paraminter.CSharp.Type.Commands;
+using Paraminter.CSharp.Type.Corus.Commands;
 using Paraminter.CSharp.Type.Corus.Common;
-using Paraminter.CSharp.Type.Corus.Queries;
-using Paraminter.CSharp.Type.Queries.Handlers;
-using Paraminter.Queries.Handlers;
 
 using System;
 
 /// <summary>Associates syntactic C# type arguments.</summary>
 public sealed class SyntacticCSharpTypeAssociator
-    : IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler>
+    : ICommandHandler<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>>
 {
+    private readonly ICommandHandler<IRecordCSharpTypeAssociationCommand> Recorder;
+
     /// <summary>Instantiates a <see cref="SyntacticCSharpTypeAssociator"/>, associating syntactic C# type arguments.</summary>
-    public SyntacticCSharpTypeAssociator() { }
-
-    void IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler>.Handle(
-        IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
-        IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler queryResponseHandler)
+    /// <param name="recorder">Records associated syntactic C# type arguments.</param>
+    public SyntacticCSharpTypeAssociator(
+        ICommandHandler<IRecordCSharpTypeAssociationCommand> recorder)
     {
-        if (query is null)
+        Recorder = recorder ?? throw new ArgumentNullException(nameof(recorder));
+    }
+
+    void ICommandHandler<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>>.Handle(
+        IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData> command)
+    {
+        if (command is null)
         {
-            throw new ArgumentNullException(nameof(query));
+            throw new ArgumentNullException(nameof(command));
         }
 
-        if (queryResponseHandler is null)
+        if (command.Data.Parameters.Count != command.Data.SyntacticArguments.Count)
         {
-            throw new ArgumentNullException(nameof(queryResponseHandler));
-        }
-
-        if (query.Data.Parameters.Count != query.Data.SyntacticArguments.Count)
-        {
-            queryResponseHandler.Invalidator.Handle(InvalidateQueryResponseCommand.Instance);
-
             return;
         }
 
-        for (var i = 0; i < query.Data.Parameters.Count; i++)
+        for (var i = 0; i < command.Data.Parameters.Count; i++)
         {
-            var parameter = query.Data.Parameters[i];
-            var syntacticArgument = query.Data.SyntacticArguments[i];
+            var parameter = command.Data.Parameters[i];
+            var syntacticArgument = command.Data.SyntacticArguments[i];
 
-            var command = new AddCSharpTypeAssociationCommand(parameter, syntacticArgument);
+            var recordCommand = new RecordCSharpTypeAssociationCommand(parameter, syntacticArgument);
 
-            queryResponseHandler.AssociationCollector.Handle(command);
+            Recorder.Handle(recordCommand);
         }
     }
 }

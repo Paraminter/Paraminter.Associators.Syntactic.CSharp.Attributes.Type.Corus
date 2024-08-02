@@ -1,11 +1,15 @@
 ﻿namespace Paraminter.CSharp.Type.Corus;
 
-using Paraminter.Associators.Queries;
-using Paraminter.CSharp.Type.Corus.Queries;
-using Paraminter.CSharp.Type.Queries.Handlers;
-using Paraminter.Queries.Handlers;
+using Moq;
+
+using Paraminter.Associators.Commands;
+using Paraminter.Commands.Handlers;
+using Paraminter.CSharp.Type.Commands;
+using Paraminter.CSharp.Type.Corus.Commands;
 
 internal interface IFixture
 {
-    public abstract IQueryHandler<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>, IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> Sut { get; }
+    public abstract ICommandHandler<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> Sut { get; }
+
+    public abstract Mock<ICommandHandler<IRecordCSharpTypeAssociationCommand>> RecorderMock { get; }
 }

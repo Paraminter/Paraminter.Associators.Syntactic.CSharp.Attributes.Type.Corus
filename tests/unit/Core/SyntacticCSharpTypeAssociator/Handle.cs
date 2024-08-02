@@ -6,11 +6,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Moq;
 
-using Paraminter.Associators.Queries;
+using Paraminter.Associators.Commands;
+using Paraminter.Commands.Handlers;
 using Paraminter.CSharp.Type.Commands;
-using Paraminter.CSharp.Type.Corus.Queries;
-using Paraminter.CSharp.Type.Queries.Handlers;
-using Paraminter.Queries.Invalidation.Commands;
+using Paraminter.CSharp.Type.Corus.Commands;
 
 using System;
 using System.Linq.Expressions;
@@ -22,48 +21,37 @@ public sealed class Handle
     private readonly IFixture Fixture = FixtureFactory.Create();
 
     [Fact]
-    public void NullQuery_ThrowsArgumentNullException()
+    public void NullCommand_ThrowsArgumentNullException()
     {
-        var result = Record.Exception(() => Target(null!, Mock.Of<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler>()));
+        var result = Record.Exception(() => Target(null!));
 
         Assert.IsType<ArgumentNullException>(result);
     }
 
     [Fact]
-    public void NullQueryResponseHandler_ThrowsArgumentNullException()
+    public void DifferentNumberOfParametersAndSyntacticArguments_RecordsNone()
     {
-        var result = Record.Exception(() => Target(Mock.Of<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>>(), null!));
+        Mock<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> commandMock = new();
 
-        Assert.IsType<ArgumentNullException>(result);
+        commandMock.Setup(static (command) => command.Data.Parameters).Returns([]);
+        commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
+
+        Target(commandMock.Object);
+
+        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Never());
     }
 
     [Fact]
-    public void DifferentNumberOfParametersAndSyntacticArguments_Invalidates()
+    public void NoParametersOrSyntacticArguments_RecordsNone()
     {
-        Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> queryResponseHandlerMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> commandMock = new();
 
-        queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
-        queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
+        commandMock.Setup(static (command) => command.Data.Parameters).Returns([]);
+        commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([]);
 
-        Target(queryMock.Object, queryResponseHandlerMock.Object);
+        Target(commandMock.Object);
 
-        queryResponseHandlerMock.Verify(static (handler) => handler.Invalidator.Handle(It.IsAny<IInvalidateQueryResponseCommand>()), Times.Once());
-    }
-
-    [Fact]
-    public void NoParametersOrSyntacticArguments_AddsNone()
-    {
-        Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> queryResponseHandlerMock = new() { DefaultValue = DefaultValue.Mock };
-
-        queryMock.Setup(static (query) => query.Data.Parameters).Returns([]);
-        queryMock.Setup(static (query) => query.Data.SyntacticArguments).Returns([]);
-
-        Target(queryMock.Object, queryResponseHandlerMock.Object);
-
-        queryResponseHandlerMock.Verify(static (handler) => handler.Invalidator.Handle(It.IsAny<IInvalidateQueryResponseCommand>()), Times.Never());
-        queryResponseHandlerMock.Verify(static (handler) => handler.AssociationCollector.Handle(It.IsAny<IAddCSharpTypeAssociationCommand>()), Times.Never());
+        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Never());
     }
 
     [Fact]
@@ -75,28 +63,26 @@ public sealed class Handle
         var syntacticArgument1 = SyntaxFactory.ParseTypeName("int");
         var syntacticArgument2 = SyntaxFactory.ParseTypeName("float");
 
-        Mock<IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData>> queryMock = new();
-        Mock<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler> queryResponseHandlerMock = new() { DefaultValue = DefaultValue.Mock };
+        Mock<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> commandMock = new();
 
-        queryMock.Setup((query) => query.Data.Parameters).Returns([parameter1, parameter2]);
-        queryMock.Setup((query) => query.Data.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
+        commandMock.Setup(static (command) => command.Data.Parameters).Returns([parameter1, parameter2]);
+        commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
 
-        Target(queryMock.Object, queryResponseHandlerMock.Object);
+        Target(commandMock.Object);
 
-        queryResponseHandlerMock.Verify(static (handler) => handler.Invalidator.Handle(It.IsAny<IInvalidateQueryResponseCommand>()), Times.Never());
-        queryResponseHandlerMock.Verify(static (handler) => handler.AssociationCollector.Handle(It.IsAny<IAddCSharpTypeAssociationCommand>()), Times.Exactly(2));
-        queryResponseHandlerMock.Verify(AssociationExpression(parameter1, syntacticArgument1), Times.Once());
-        queryResponseHandlerMock.Verify(AssociationExpression(parameter2, syntacticArgument2), Times.Once());
+        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Exactly(2));
+        Fixture.RecorderMock.Verify(RecordExpression(parameter1, syntacticArgument1), Times.Once());
+        Fixture.RecorderMock.Verify(RecordExpression(parameter2, syntacticArgument2), Times.Once());
     }
 
-    private static Expression<Action<IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler>> AssociationExpression(
+    private static Expression<Action<ICommandHandler<IRecordCSharpTypeAssociationCommand>>> RecordExpression(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
-        return (handler) => handler.AssociationCollector.Handle(It.Is(MatchAssociationCommand(parameter, syntacticArgument)));
+        return (recorder) => recorder.Handle(It.Is(MatchRecordCommand(parameter, syntacticArgument)));
     }
 
-    private static Expression<Func<IAddCSharpTypeAssociationCommand, bool>> MatchAssociationCommand(
+    private static Expression<Func<IRecordCSharpTypeAssociationCommand, bool>> MatchRecordCommand(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
@@ -104,9 +90,8 @@ public sealed class Handle
     }
 
     private void Target(
-        IAssociateArgumentsQuery<IAssociateSyntacticCSharpTypeData> query,
-        IInvalidatingAssociateSyntacticCSharpTypeQueryResponseHandler queryResponseHandler)
+        IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData> command)
     {
-        Fixture.Sut.Handle(query, queryResponseHandler);
+        Fixture.Sut.Handle(command);
     }
 }
