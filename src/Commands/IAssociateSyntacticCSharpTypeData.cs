@@ -1,4 +1,4 @@
-﻿namespace Paraminter.CSharp.Type.Corus.Queries;
+﻿namespace Paraminter.CSharp.Type.Corus.Commands;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

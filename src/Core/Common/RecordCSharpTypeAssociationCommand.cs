@@ -5,13 +5,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Paraminter.CSharp.Type.Commands;
 
-internal sealed class AddCSharpTypeAssociationCommand
-    : IAddCSharpTypeAssociationCommand
+internal sealed class RecordCSharpTypeAssociationCommand
+    : IRecordCSharpTypeAssociationCommand
 {
     private readonly ITypeParameterSymbol Parameter;
     private readonly TypeSyntax SyntacticArgument;
 
-    public AddCSharpTypeAssociationCommand(
+    public RecordCSharpTypeAssociationCommand(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
@@ -19,6 +19,6 @@ internal sealed class AddCSharpTypeAssociationCommand
         SyntacticArgument = syntacticArgument;
     }
 
-    ITypeParameterSymbol IAddCSharpTypeAssociationCommand.Parameter => Parameter;
-    TypeSyntax IAddCSharpTypeAssociationCommand.SyntacticArgument => SyntacticArgument;
+    ITypeParameterSymbol IRecordCSharpTypeAssociationCommand.Parameter => Parameter;
+    TypeSyntax IRecordCSharpTypeAssociationCommand.SyntacticArgument => SyntacticArgument;
 }
