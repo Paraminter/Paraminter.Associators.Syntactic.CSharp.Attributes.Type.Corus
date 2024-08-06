@@ -11,6 +11,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+
+        <PackageReference Include="Paraminter.Associators.Models" />
     </ItemGroup>
 
 </Project>
