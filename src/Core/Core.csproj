@@ -4,15 +4,16 @@
         <AssemblyName>Paraminter.CSharp.Type.Corus</AssemblyName>
         
         <PackageId>Paraminter.CSharp.Type.Corus</PackageId>
-        <Description>Provides general implementations of services related to a Paraminter associator specialized in syntactic C# type arguments.</Description>
+        <Description>Provides general implementations of services related to a Paraminter associator of syntactic C# type arguments.</Description>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Paraminter.Arguments.CSharp.Type.Models" />
         <PackageReference Include="Paraminter.Associators.Commands" />
         <PackageReference Include="Paraminter.Commands.Handlers" />
-        <PackageReference Include="Paraminter.CSharp.Type.Common.Commands" />
+        <PackageReference Include="Paraminter.Parameters.Type.Models" />
 
-        <ProjectReference Include="$(SolutionDir)\src\Commands\Commands.csproj" />
+        <ProjectReference Include="$(SolutionDir)\src\Models\Models.csproj" />
     </ItemGroup>
 
 </Project>
