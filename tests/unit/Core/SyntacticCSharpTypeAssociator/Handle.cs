@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Moq;
 
+using Paraminter.Arguments.CSharp.Type.Models;
 using Paraminter.Associators.Commands;
 using Paraminter.Commands.Handlers;
-using Paraminter.CSharp.Type.Commands;
-using Paraminter.CSharp.Type.Corus.Commands;
+using Paraminter.CSharp.Type.Corus.Models;
+using Paraminter.Parameters.Type.Models;
 
 using System;
 using System.Linq.Expressions;
@@ -29,7 +30,7 @@ public sealed class Handle
     }
 
     [Fact]
-    public void DifferentNumberOfParametersAndSyntacticArguments_RecordsNone()
+    public void DifferentNumberOfParametersAndSyntacticArguments_Invalidates()
     {
         Mock<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> commandMock = new();
 
@@ -38,7 +39,7 @@ public sealed class Handle
 
         Target(commandMock.Object);
 
-        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Never());
+        Fixture.InvalidatorMock.Verify(static (invalidator) => invalidator.Handle(It.IsAny<IInvalidateArgumentAssociationsRecordCommand>()), Times.AtLeastOnce());
     }
 
     [Fact]
@@ -51,7 +52,9 @@ public sealed class Handle
 
         Target(commandMock.Object);
 
-        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Never());
+        Fixture.InvalidatorMock.Verify(static (invalidator) => invalidator.Handle(It.IsAny<IInvalidateArgumentAssociationsRecordCommand>()), Times.Never());
+
+        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Never());
     }
 
     [Fact]
@@ -70,23 +73,39 @@ public sealed class Handle
 
         Target(commandMock.Object);
 
-        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordCSharpTypeAssociationCommand>()), Times.Exactly(2));
+        Fixture.InvalidatorMock.Verify(static (invalidator) => invalidator.Handle(It.IsAny<IInvalidateArgumentAssociationsRecordCommand>()), Times.Never());
+
+        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(2));
         Fixture.RecorderMock.Verify(RecordExpression(parameter1, syntacticArgument1), Times.Once());
         Fixture.RecorderMock.Verify(RecordExpression(parameter2, syntacticArgument2), Times.Once());
     }
 
-    private static Expression<Action<ICommandHandler<IRecordCSharpTypeAssociationCommand>>> RecordExpression(
+    private static Expression<Action<ICommandHandler<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>>>> RecordExpression(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
         return (recorder) => recorder.Handle(It.Is(MatchRecordCommand(parameter, syntacticArgument)));
     }
 
-    private static Expression<Func<IRecordCSharpTypeAssociationCommand, bool>> MatchRecordCommand(
-        ITypeParameterSymbol parameter,
+    private static Expression<Func<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchRecordCommand(
+        ITypeParameterSymbol parameterSymbol,
         TypeSyntax syntacticArgument)
     {
-        return (command) => ReferenceEquals(command.Parameter, parameter) && ReferenceEquals(command.SyntacticArgument, syntacticArgument);
+        return (command) => MatchParameter(parameterSymbol, command.Parameter) && MatchArgumentData(syntacticArgument, command.ArgumentData);
+    }
+
+    private static bool MatchParameter(
+        ITypeParameterSymbol parameterSymbol,
+        ITypeParameter parameter)
+    {
+        return ReferenceEquals(parameterSymbol, parameter.Symbol);
+    }
+
+    private static bool MatchArgumentData(
+        TypeSyntax syntacticArgument,
+        ICSharpTypeArgumentData argumentData)
+    {
+        return ReferenceEquals(syntacticArgument, argumentData.SyntacticArgument);
     }
 
     private void Target(

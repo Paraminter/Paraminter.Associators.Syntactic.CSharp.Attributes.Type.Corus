@@ -11,10 +11,11 @@
 
         <PackageVersion Include="Moq" Version="4.20.70" />
 
-        <PackageVersion Include="Paraminter.Associators.Commands" Version="8.0.0-alpha.8" />
+        <PackageVersion Include="Paraminter.Arguments.CSharp.Type.Models" Version="8.0.0-alpha.4" />
+        <PackageVersion Include="Paraminter.Associators.Commands" Version="8.0.0-alpha.10" />
         <PackageVersion Include="Paraminter.Commands.Handlers" Version="8.0.0-alpha.22" />
-        <PackageVersion Include="Paraminter.CSharp.Type.Common.Commands" Version="8.0.0-alpha.21" />
         <PackageVersion Include="Paraminter.Logo" Version="2.0.0-alpha.10" />
+        <PackageVersion Include="Paraminter.Parameters.Type.Models" Version="8.0.0-alpha.66" />
 
         <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.24.0.89429" />
 

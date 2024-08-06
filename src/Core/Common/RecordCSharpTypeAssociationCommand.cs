@@ -1,24 +1,23 @@
 ﻿namespace Paraminter.CSharp.Type.Corus.Common;
 
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-using Paraminter.CSharp.Type.Commands;
+using Paraminter.Arguments.CSharp.Type.Models;
+using Paraminter.Associators.Commands;
+using Paraminter.Parameters.Type.Models;
 
 internal sealed class RecordCSharpTypeAssociationCommand
-    : IRecordCSharpTypeAssociationCommand
+    : IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>
 {
-    private readonly ITypeParameterSymbol Parameter;
-    private readonly TypeSyntax SyntacticArgument;
+    private readonly ITypeParameter Parameter;
+    private readonly ICSharpTypeArgumentData ArgumentData;
 
     public RecordCSharpTypeAssociationCommand(
-        ITypeParameterSymbol parameter,
-        TypeSyntax syntacticArgument)
+        ITypeParameter parameter,
+        ICSharpTypeArgumentData argumentData)
     {
         Parameter = parameter;
-        SyntacticArgument = syntacticArgument;
+        ArgumentData = argumentData;
     }
 
-    ITypeParameterSymbol IRecordCSharpTypeAssociationCommand.Parameter => Parameter;
-    TypeSyntax IRecordCSharpTypeAssociationCommand.SyntacticArgument => SyntacticArgument;
+    ITypeParameter IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>.Parameter => Parameter;
+    ICSharpTypeArgumentData IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>.ArgumentData => ArgumentData;
 }
