@@ -6,11 +6,13 @@
         <RootNamespace>Paraminter.CSharp.Type.Corus.Models</RootNamespace>
         
         <PackageId>Paraminter.CSharp.Type.Corus.Models</PackageId>
-        <Description>Defines models related to a Paraminter associator of syntactic C# type arguments.</Description>
+        <Description>Defines models for a Paraminter associator of syntactic C# type arguments.</Description>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+
+        <PackageReference Include="Paraminter.Associators.Models" />
     </ItemGroup>
 
 </Project>

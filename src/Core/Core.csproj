@@ -4,7 +4,7 @@
         <AssemblyName>Paraminter.CSharp.Type.Corus</AssemblyName>
         
         <PackageId>Paraminter.CSharp.Type.Corus</PackageId>
-        <Description>Provides general implementations of services related to a Paraminter associator of syntactic C# type arguments.</Description>
+        <Description>Provides a Paraminter associator of syntactic C# type arguments.</Description>
     </PropertyGroup>
 
     <ItemGroup>
