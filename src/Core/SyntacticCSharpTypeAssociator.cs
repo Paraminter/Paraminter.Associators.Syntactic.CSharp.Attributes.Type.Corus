@@ -19,7 +19,7 @@ public sealed class SyntacticCSharpTypeAssociator
 
     /// <summary>Instantiates a <see cref="SyntacticCSharpTypeAssociator"/>, associating syntactic C# type arguments.</summary>
     /// <param name="recorder">Records associated syntactic C# type arguments.</param>
-    /// <param name="invalidator">Invalidates the record of associated semantic type arguments.</param>
+    /// <param name="invalidator">Invalidates the record of associated syntactic C# type arguments.</param>
     public SyntacticCSharpTypeAssociator(
         ICommandHandler<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>> recorder,
         ICommandHandler<IInvalidateArgumentAssociationsRecordCommand> invalidator)
