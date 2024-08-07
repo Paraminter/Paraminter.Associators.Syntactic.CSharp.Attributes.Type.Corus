@@ -1,8 +1,8 @@
 ﻿namespace Paraminter.CSharp.Type.Corus.Common;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Associators.Commands;
 using Paraminter.Parameters.Type.Models;
+using Paraminter.Recorders.Commands;
 
 internal sealed class RecordCSharpTypeAssociationCommand
     : IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>
