@@ -1,6 +1,6 @@
 ﻿namespace Paraminter.CSharp.Type.Corus.Common;
 
-using Paraminter.Associators.Commands;
+using Paraminter.Recorders.Commands;
 
 internal sealed class InvalidateArgumentAssociationsRecordCommand
     : IInvalidateArgumentAssociationsRecordCommand
