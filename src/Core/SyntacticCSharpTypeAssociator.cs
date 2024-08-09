@@ -1,13 +1,13 @@
 ﻿namespace Paraminter.CSharp.Type.Corus;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Associators.Commands;
-using Paraminter.Commands.Handlers;
-using Paraminter.CSharp.Type.Corus.Common;
+using Paraminter.Commands;
+using Paraminter.Cqs.Handlers;
+using Paraminter.CSharp.Type.Corus.Commands;
 using Paraminter.CSharp.Type.Corus.Models;
 using Paraminter.Parameters.Type.Models;
 using Paraminter.Recorders.Commands;
-using Paraminter.Semantic.Type.Apheleia.Common;
+using Paraminter.Semantic.Type.Apheleia.Models;
 
 using System;
 
