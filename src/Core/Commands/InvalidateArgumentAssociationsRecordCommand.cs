@@ -1,4 +1,4 @@
-﻿namespace Paraminter.CSharp.Type.Corus.Common;
+﻿namespace Paraminter.CSharp.Type.Corus.Commands;
 
 using Paraminter.Recorders.Commands;
 
