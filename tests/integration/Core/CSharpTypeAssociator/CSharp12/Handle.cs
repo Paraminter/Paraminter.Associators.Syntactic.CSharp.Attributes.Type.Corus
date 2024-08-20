@@ -8,9 +8,9 @@ using Moq;
 using Paraminter.Arguments.CSharp.Type.Models;
 using Paraminter.Commands;
 using Paraminter.Cqs.Handlers;
+using Paraminter.CSharp.Type.Corus.Errors.Commands;
 using Paraminter.CSharp.Type.Corus.Models;
 using Paraminter.Parameters.Type.Models;
-using Paraminter.Recorders.Commands;
 
 using System;
 
@@ -45,29 +45,29 @@ public sealed class Handle
         var parameters = target.TypeParameters;
         var syntacticArguments = compilation.SyntaxTrees[0].GetRoot().DescendantNodes().OfType<TypeArgumentListSyntax>().Single().Arguments;
 
-        Mock<IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData>> commandMock = new();
+        Mock<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> commandMock = new();
 
         commandMock.Setup(static (command) => command.Data.Parameters).Returns(parameters);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns(syntacticArguments);
 
         Target(commandMock.Object);
 
-        Fixture.InvalidatorMock.Verify(static (invalidator) => invalidator.Handle(It.IsAny<IInvalidateArgumentAssociationsRecordCommand>()), Times.Never());
+        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>()), Times.Never());
 
-        Fixture.RecorderMock.Verify(static (recorder) => recorder.Handle(It.IsAny<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(3));
-        Fixture.RecorderMock.Verify(RecordExpression(parameters[0], syntacticArguments[0]), Times.Once());
-        Fixture.RecorderMock.Verify(RecordExpression(parameters[1], syntacticArguments[1]), Times.Once());
-        Fixture.RecorderMock.Verify(RecordExpression(parameters[2], syntacticArguments[2]), Times.Once());
+        Fixture.IndividualAssociatorMock.Verify(static (associator) => associator.Handle(It.IsAny<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(3));
+        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[0], syntacticArguments[0]), Times.Once());
+        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[1], syntacticArguments[1]), Times.Once());
+        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[2], syntacticArguments[2]), Times.Once());
     }
 
-    private static Expression<Action<ICommandHandler<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>>>> RecordExpression(
+    private static Expression<Action<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>> AssociateIndividualExpression(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
-        return (recorder) => recorder.Handle(It.Is(MatchRecordCommand(parameter, syntacticArgument)));
+        return (associator) => associator.Handle(It.Is(MatchAssociateIndividualCommand(parameter, syntacticArgument)));
     }
 
-    private static Expression<Func<IRecordArgumentAssociationCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchRecordCommand(
+    private static Expression<Func<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchAssociateIndividualCommand(
         ITypeParameterSymbol parameterSymbol,
         TypeSyntax syntacticArgument)
     {
@@ -89,7 +89,7 @@ public sealed class Handle
     }
 
     private void Target(
-        IAssociateArgumentsCommand<IAssociateSyntacticCSharpTypeData> command)
+        IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData> command)
     {
         Fixture.Sut.Handle(command);
     }

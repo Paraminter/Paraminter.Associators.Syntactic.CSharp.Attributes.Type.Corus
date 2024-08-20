@@ -7,9 +7,9 @@ using Paraminter.Models;
 
 using System.Collections.Generic;
 
-/// <summary>Represents data used to associate syntactic C# type arguments.</summary>
-public interface IAssociateSyntacticCSharpTypeData
-    : IAssociateArgumentsData
+/// <summary>Represents data used to associate all syntactic C# type arguments with parameters.</summary>
+public interface IAssociateAllSyntacticCSharpTypeArgumentsData
+    : IAssociateAllArgumentsData
 {
     /// <summary>The type parameters.</summary>
     public abstract IReadOnlyList<ITypeParameterSymbol> Parameters { get; }
