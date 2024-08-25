@@ -8,7 +8,7 @@ using Paraminter.Models;
 using System.Collections.Generic;
 
 /// <summary>Represents data used to associate all syntactic C# type arguments with parameters.</summary>
-public interface IAssociateAllSyntacticCSharpTypeArgumentsData
+public interface IAssociateAllCSharpTypeArgumentsData
     : IAssociateAllArgumentsData
 {
     /// <summary>The type parameters.</summary>

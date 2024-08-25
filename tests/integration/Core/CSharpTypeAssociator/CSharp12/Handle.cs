@@ -45,7 +45,7 @@ public sealed class Handle
         var parameters = target.TypeParameters;
         var syntacticArguments = compilation.SyntaxTrees[0].GetRoot().DescendantNodes().OfType<TypeArgumentListSyntax>().Single().Arguments;
 
-        Mock<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> commandMock = new();
+        Mock<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> commandMock = new();
 
         commandMock.Setup(static (command) => command.Data.Parameters).Returns(parameters);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns(syntacticArguments);
@@ -89,7 +89,7 @@ public sealed class Handle
     }
 
     private void Target(
-        IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData> command)
+        IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData> command)
     {
         Fixture.Sut.Handle(command);
     }
