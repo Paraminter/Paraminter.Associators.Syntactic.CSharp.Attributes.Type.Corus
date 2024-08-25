@@ -24,13 +24,13 @@ internal static class FixtureFactory
     private sealed class Fixture
         : IFixture
     {
-        private readonly ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> Sut;
+        private readonly ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> Sut;
 
         private readonly Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IndividualAssociatorMock;
         private readonly Mock<ICSharpTypeAssociatorErrorHandler> ErrorHandlerMock;
 
         public Fixture(
-            ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> sut,
+            ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> sut,
             Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> individualAssociatorMock,
             Mock<ICSharpTypeAssociatorErrorHandler> errorHandlerMock)
         {
@@ -40,7 +40,7 @@ internal static class FixtureFactory
             ErrorHandlerMock = errorHandlerMock;
         }
 
-        ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> IFixture.Sut => Sut;
+        ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> IFixture.Sut => Sut;
 
         Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IFixture.IndividualAssociatorMock => IndividualAssociatorMock;
         Mock<ICSharpTypeAssociatorErrorHandler> IFixture.ErrorHandlerMock => ErrorHandlerMock;

@@ -17,7 +17,7 @@ using System;
 
 /// <summary>Associates C# type arguments with parameters.</summary>
 public sealed class CSharpTypeAssociator
-    : ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>>
+    : ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>>
 {
     private readonly ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> IndividualAssociator;
     private readonly ICSharpTypeAssociatorErrorHandler ErrorHandler;
@@ -33,8 +33,8 @@ public sealed class CSharpTypeAssociator
         ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
     }
 
-    void ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>>.Handle(
-        IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData> command)
+    void ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>>.Handle(
+        IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData> command)
     {
         if (command is null)
         {

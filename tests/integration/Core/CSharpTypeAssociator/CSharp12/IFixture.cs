@@ -11,7 +11,7 @@ using Paraminter.Parameters.Type.Models;
 
 internal interface IFixture
 {
-    public abstract ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllSyntacticCSharpTypeArgumentsData>> Sut { get; }
+    public abstract ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> Sut { get; }
 
     public abstract Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IndividualAssociatorMock { get; }
     public abstract Mock<ICSharpTypeAssociatorErrorHandler> ErrorHandlerMock { get; }
