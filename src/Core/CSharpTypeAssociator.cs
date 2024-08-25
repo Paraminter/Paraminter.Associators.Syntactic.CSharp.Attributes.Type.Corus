@@ -15,15 +15,15 @@ using Paraminter.Semantic.Type.Apheleia.Models;
 
 using System;
 
-/// <summary>Associates C# type arguments with parameters.</summary>
+/// <summary>Associates syntactic C# type arguments with parameters.</summary>
 public sealed class CSharpTypeAssociator
     : ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>>
 {
     private readonly ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> IndividualAssociator;
     private readonly ICSharpTypeAssociatorErrorHandler ErrorHandler;
 
-    /// <summary>Instantiates an associator of C# type arguments with parameters.</summary>
-    /// <param name="individualAssociator">Associates individual C# type arguments with parameters.</param>
+    /// <summary>Instantiates an associator of syntactic C# type arguments with parameters.</summary>
+    /// <param name="individualAssociator">Associates individual syntactic C# type arguments with parameters.</param>
     /// <param name="errorHandler">Handles encountered errors.</param>
     public CSharpTypeAssociator(
         ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> individualAssociator,

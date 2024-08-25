@@ -11,7 +11,7 @@ public sealed class CSharpTypeAssociatorErrorHandler
 {
     private readonly ICommandHandler<IHandleDifferentNumberOfArgumentsAndParametersCommand> DifferentNumberOfArgumentsAndParameters;
 
-    /// <summary>Instantiates a handler of errors encountered when associating C# type arguments with parameters.</summary>
+    /// <summary>Instantiates a handler of errors encountered when associating syntactic C# type arguments with parameters.</summary>
     /// <param name="differentNumberOfArgumentsAndParameters">Handles there being a different number of arguments and parameters.</param>
     public CSharpTypeAssociatorErrorHandler(
         ICommandHandler<IHandleDifferentNumberOfArgumentsAndParametersCommand> differentNumberOfArgumentsAndParameters)
