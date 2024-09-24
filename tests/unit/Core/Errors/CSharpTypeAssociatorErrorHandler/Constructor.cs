@@ -1,9 +1,9 @@
-﻿namespace Paraminter.CSharp.Type.Corus.Errors;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus.Errors;
 
 using Moq;
 
+using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Errors.Commands;
 
 using System;
 

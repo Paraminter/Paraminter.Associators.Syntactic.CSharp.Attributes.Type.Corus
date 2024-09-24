@@ -1,48 +1,49 @@
-﻿namespace Paraminter.CSharp.Type.Corus;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus;
 
 using Moq;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Commands;
+using Paraminter.Associating.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Errors;
+using Paraminter.Associating.CSharp.Type.Corus.Models;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Errors;
-using Paraminter.CSharp.Type.Corus.Models;
+using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
 internal static class FixtureFactory
 {
     public static IFixture Create()
     {
-        Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> individualAssociatorMock = new();
+        Mock<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> pairerMock = new();
         Mock<ICSharpTypeAssociatorErrorHandler> errorHandlerMock = new() { DefaultValue = DefaultValue.Mock };
 
-        CSharpTypeAssociator sut = new(individualAssociatorMock.Object, errorHandlerMock.Object);
+        CSharpTypeAssociator sut = new(pairerMock.Object, errorHandlerMock.Object);
 
-        return new Fixture(sut, individualAssociatorMock, errorHandlerMock);
+        return new Fixture(sut, pairerMock, errorHandlerMock);
     }
 
     private sealed class Fixture
         : IFixture
     {
-        private readonly ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> Sut;
+        private readonly ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> Sut;
 
-        private readonly Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IndividualAssociatorMock;
+        private readonly Mock<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> PairerMock;
         private readonly Mock<ICSharpTypeAssociatorErrorHandler> ErrorHandlerMock;
 
         public Fixture(
-            ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> sut,
-            Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> individualAssociatorMock,
+            ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> sut,
+            Mock<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> pairerMock,
             Mock<ICSharpTypeAssociatorErrorHandler> errorHandlerMock)
         {
             Sut = sut;
 
-            IndividualAssociatorMock = individualAssociatorMock;
+            PairerMock = pairerMock;
             ErrorHandlerMock = errorHandlerMock;
         }
 
-        ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> IFixture.Sut => Sut;
+        ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> IFixture.Sut => Sut;
 
-        Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IFixture.IndividualAssociatorMock => IndividualAssociatorMock;
+        Mock<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IFixture.PairerMock => PairerMock;
         Mock<ICSharpTypeAssociatorErrorHandler> IFixture.ErrorHandlerMock => ErrorHandlerMock;
     }
 }

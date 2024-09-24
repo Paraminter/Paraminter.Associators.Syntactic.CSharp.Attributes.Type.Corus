@@ -1,4 +1,4 @@
-﻿namespace Paraminter.CSharp.Type.Corus;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Moq;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Commands;
+using Paraminter.Associating.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Models;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Errors.Commands;
-using Paraminter.CSharp.Type.Corus.Models;
+using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
 using System;
@@ -24,7 +25,7 @@ public sealed class Handle
     private readonly IFixture Fixture = FixtureFactory.Create();
 
     [Fact]
-    public void MethodInvocation_AssociatesAll()
+    public void MethodInvocation_PairsAll()
     {
         var source = """
             public class Foo
@@ -45,7 +46,7 @@ public sealed class Handle
         var parameters = target.TypeParameters;
         var syntacticArguments = compilation.SyntaxTrees[0].GetRoot().DescendantNodes().OfType<TypeArgumentListSyntax>().Single().Arguments;
 
-        Mock<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> commandMock = new();
+        Mock<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> commandMock = new();
 
         commandMock.Setup(static (command) => command.Data.Parameters).Returns(parameters);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns(syntacticArguments);
@@ -54,20 +55,20 @@ public sealed class Handle
 
         Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>()), Times.Never());
 
-        Fixture.IndividualAssociatorMock.Verify(static (associator) => associator.Handle(It.IsAny<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(3));
-        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[0], syntacticArguments[0]), Times.Once());
-        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[1], syntacticArguments[1]), Times.Once());
-        Fixture.IndividualAssociatorMock.Verify(AssociateIndividualExpression(parameters[2], syntacticArguments[2]), Times.Once());
+        Fixture.PairerMock.Verify(PairArgumentExpression(parameters[0], syntacticArguments[0]), Times.Once());
+        Fixture.PairerMock.Verify(PairArgumentExpression(parameters[1], syntacticArguments[1]), Times.Once());
+        Fixture.PairerMock.Verify(PairArgumentExpression(parameters[2], syntacticArguments[2]), Times.Once());
+        Fixture.PairerMock.Verify(static (handler) => handler.Handle(It.IsAny<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(3));
     }
 
-    private static Expression<Action<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>> AssociateIndividualExpression(
+    private static Expression<Action<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>> PairArgumentExpression(
         ITypeParameterSymbol parameter,
         TypeSyntax syntacticArgument)
     {
-        return (associator) => associator.Handle(It.Is(MatchAssociateIndividualCommand(parameter, syntacticArgument)));
+        return (handler) => handler.Handle(It.Is(MatchPairArgumentCommand(parameter, syntacticArgument)));
     }
 
-    private static Expression<Func<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchAssociateIndividualCommand(
+    private static Expression<Func<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchPairArgumentCommand(
         ITypeParameterSymbol parameterSymbol,
         TypeSyntax syntacticArgument)
     {
@@ -89,7 +90,7 @@ public sealed class Handle
     }
 
     private void Target(
-        IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData> command)
+        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command)
     {
         Fixture.Sut.Handle(command);
     }

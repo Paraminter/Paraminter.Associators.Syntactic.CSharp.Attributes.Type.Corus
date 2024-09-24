@@ -1,4 +1,4 @@
-﻿namespace Paraminter.Semantic.Type.Apheleia.Models;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus.Models;
 
 using Microsoft.CodeAnalysis;
 

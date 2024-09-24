@@ -1,4 +1,4 @@
-﻿namespace Paraminter.CSharp.Type.Corus.Errors.Commands;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
 
 internal sealed class HandleDifferentNumberOfArgumentsAndParametersCommand
     : IHandleDifferentNumberOfArgumentsAndParametersCommand

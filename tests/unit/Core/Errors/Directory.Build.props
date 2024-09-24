@@ -3,7 +3,7 @@
     <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
     <PropertyGroup>
-        <RootNamespace>Paraminter.CSharp.Type.Corus.Errors</RootNamespace>
+        <RootNamespace>Paraminter.Associating.CSharp.Type.Corus.Errors</RootNamespace>
     </PropertyGroup>
     
 </Project>
