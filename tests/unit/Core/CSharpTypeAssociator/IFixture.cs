@@ -1,18 +1,19 @@
-﻿namespace Paraminter.CSharp.Type.Corus;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus;
 
 using Moq;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Commands;
+using Paraminter.Associating.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Errors;
+using Paraminter.Associating.CSharp.Type.Corus.Models;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Errors;
-using Paraminter.CSharp.Type.Corus.Models;
+using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
 internal interface IFixture
 {
-    public abstract ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>> Sut { get; }
+    public abstract ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> Sut { get; }
 
-    public abstract Mock<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> IndividualAssociatorMock { get; }
+    public abstract Mock<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>> PairerMock { get; }
     public abstract Mock<ICSharpTypeAssociatorErrorHandler> ErrorHandlerMock { get; }
 }

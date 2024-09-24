@@ -1,40 +1,40 @@
-﻿namespace Paraminter.CSharp.Type.Corus;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Commands;
+using Paraminter.Associating.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Errors;
+using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Models;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Commands;
-using Paraminter.CSharp.Type.Corus.Errors;
-using Paraminter.CSharp.Type.Corus.Errors.Commands;
-using Paraminter.CSharp.Type.Corus.Models;
+using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
-using Paraminter.Semantic.Type.Apheleia.Models;
 
 using System;
 
 /// <summary>Associates syntactic C# type arguments with parameters.</summary>
 public sealed class CSharpTypeAssociator
-    : ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>>
+    : ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>>
 {
-    private readonly ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> IndividualAssociator;
+    private readonly ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> Pairer;
     private readonly ICSharpTypeAssociatorErrorHandler ErrorHandler;
 
     /// <summary>Instantiates an associator of syntactic C# type arguments with parameters.</summary>
-    /// <param name="individualAssociator">Associates individual syntactic C# type arguments with parameters.</param>
+    /// <param name="pairer">Pairs syntactic C# type arguments with parameters.</param>
     /// <param name="errorHandler">Handles encountered errors.</param>
     public CSharpTypeAssociator(
-        ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> individualAssociator,
+        ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> pairer,
         ICSharpTypeAssociatorErrorHandler errorHandler)
     {
-        IndividualAssociator = individualAssociator ?? throw new ArgumentNullException(nameof(individualAssociator));
+        Pairer = pairer ?? throw new ArgumentNullException(nameof(pairer));
         ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
     }
 
-    void ICommandHandler<IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData>>.Handle(
-        IAssociateAllArgumentsCommand<IAssociateAllCSharpTypeArgumentsData> command)
+    void ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>>.Handle(
+        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command)
     {
         if (command is null)
         {
@@ -50,19 +50,19 @@ public sealed class CSharpTypeAssociator
 
         for (var i = 0; i < command.Data.Parameters.Count; i++)
         {
-            AssociateArgument(command.Data.Parameters[i], command.Data.SyntacticArguments[i]);
+            PairArgument(command.Data.Parameters[i], command.Data.SyntacticArguments[i]);
         }
     }
 
-    private void AssociateArgument(
+    private void PairArgument(
         ITypeParameterSymbol parameterSymbol,
         TypeSyntax syntacticArgument)
     {
         var parameter = new TypeParameter(parameterSymbol);
         var argumentData = new CSharpTypeArgumentData(syntacticArgument);
 
-        var command = new AssociateSingleArgumentCommand(parameter, argumentData);
+        var command = new PairArgumentCommand(parameter, argumentData);
 
-        IndividualAssociator.Handle(command);
+        Pairer.Handle(command);
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace Paraminter.CSharp.Type.Corus;
+﻿namespace Paraminter.Associating.CSharp.Type.Corus;
 
 using Moq;
 
 using Paraminter.Arguments.CSharp.Type.Models;
-using Paraminter.Commands;
+using Paraminter.Associating.CSharp.Type.Corus.Errors;
 using Paraminter.Cqs.Handlers;
-using Paraminter.CSharp.Type.Corus.Errors;
+using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
 using System;
@@ -15,7 +15,7 @@ using Xunit;
 public sealed class Constructor
 {
     [Fact]
-    public void NullIndividualAssociator_ThrowsArgumentNullException()
+    public void NullPairer_ThrowsArgumentNullException()
     {
         var result = Record.Exception(() => Target(null!, Mock.Of<ICSharpTypeAssociatorErrorHandler>()));
 
@@ -25,7 +25,7 @@ public sealed class Constructor
     [Fact]
     public void NullErrorHandler_ThrowsArgumentNullException()
     {
-        var result = Record.Exception(() => Target(Mock.Of<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>(), null!));
+        var result = Record.Exception(() => Target(Mock.Of<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>(), null!));
 
         Assert.IsType<ArgumentNullException>(result);
     }
@@ -33,15 +33,15 @@ public sealed class Constructor
     [Fact]
     public void ValidArguments_ReturnsAssociator()
     {
-        var result = Target(Mock.Of<ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>(), Mock.Of<ICSharpTypeAssociatorErrorHandler>());
+        var result = Target(Mock.Of<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>(), Mock.Of<ICSharpTypeAssociatorErrorHandler>());
 
         Assert.NotNull(result);
     }
 
     private static CSharpTypeAssociator Target(
-        ICommandHandler<IAssociateSingleArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> individualAssociator,
+        ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>> pairer,
         ICSharpTypeAssociatorErrorHandler errorHandler)
     {
-        return new CSharpTypeAssociator(individualAssociator, errorHandler);
+        return new CSharpTypeAssociator(pairer, errorHandler);
     }
 }

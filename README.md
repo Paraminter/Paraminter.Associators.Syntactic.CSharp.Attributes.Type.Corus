@@ -1,4 +1,4 @@
-# Paraminter.CSharp.Type.Corus
+# Paraminter.Associating.CSharp.Type.Corus
 
 Provides a `Paraminter` associator of syntactic C# type arguments.
 

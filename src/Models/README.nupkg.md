@@ -1,5 +1,5 @@
-# Paraminter.CSharp.Type.Corus.Models
+# Paraminter.Associating.CSharp.Type.Corus.Models
 
 Defines models for a `Paraminter` associator of syntactic C# type arguments.
 
-See [GitHub](https://github.com/Paraminter/Paraminter.CSharp.Type.Corus) for more information.
+See [GitHub](https://github.com/Paraminter/Paraminter.Associating.CSharp.Type.Corus) for more information.
