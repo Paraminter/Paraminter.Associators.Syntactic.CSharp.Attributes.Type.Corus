@@ -1,7 +1,7 @@
 ﻿namespace Paraminter.Associating.CSharp.Type.Corus.Errors;
 
 using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
-using Paraminter.Cqs.Handlers;
+using Paraminter.Cqs;
 
 using System;
 
