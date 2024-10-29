@@ -16,6 +16,8 @@ using Paraminter.Parameters.Type.Models;
 
 using System;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Xunit;
 
@@ -24,43 +26,43 @@ public sealed class Handle
     private readonly IFixture Fixture = FixtureFactory.Create();
 
     [Fact]
-    public void NullCommand_ThrowsArgumentNullException()
+    public async Task NullCommand_ThrowsArgumentNullException()
     {
-        var result = Record.Exception(() => Target(null!));
+        var result = await Record.ExceptionAsync(() => Target(null!, CancellationToken.None));
 
         Assert.IsType<ArgumentNullException>(result);
     }
 
     [Fact]
-    public void DifferentNumberOfParametersAndSyntacticArguments_HandlesError()
+    public async Task DifferentNumberOfParametersAndSyntacticArguments_HandlesError()
     {
         Mock<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> commandMock = new();
 
         commandMock.Setup(static (command) => command.Data.Parameters).Returns([]);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([SyntaxFactory.ParseTypeName("int")]);
 
-        Target(commandMock.Object);
+        await Target(commandMock.Object, CancellationToken.None);
 
-        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>()), Times.Once());
+        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>(), It.IsAny<CancellationToken>()), Times.Once());
     }
 
     [Fact]
-    public void NoParametersOrSyntacticArguments_PairsNone()
+    public async Task NoParametersOrSyntacticArguments_PairsNone()
     {
         Mock<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>> commandMock = new();
 
         commandMock.Setup(static (command) => command.Data.Parameters).Returns([]);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([]);
 
-        Target(commandMock.Object);
+        await Target(commandMock.Object, CancellationToken.None);
 
-        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>()), Times.Never());
+        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>(), It.IsAny<CancellationToken>()), Times.Never());
 
-        Fixture.PairerMock.Verify(static (handler) => handler.Handle(It.IsAny<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Never());
+        Fixture.PairerMock.Verify(static (handler) => handler.Handle(It.IsAny<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>(), It.IsAny<CancellationToken>()), Times.Never());
     }
 
     [Fact]
-    public void SameNumberOfParametersAndArguments_PairsAll()
+    public async Task SameNumberOfParametersAndArguments_PairsAll()
     {
         var parameter1 = Mock.Of<ITypeParameterSymbol>();
         var parameter2 = Mock.Of<ITypeParameterSymbol>();
@@ -73,20 +75,21 @@ public sealed class Handle
         commandMock.Setup(static (command) => command.Data.Parameters).Returns([parameter1, parameter2]);
         commandMock.Setup(static (command) => command.Data.SyntacticArguments).Returns([syntacticArgument1, syntacticArgument2]);
 
-        Target(commandMock.Object);
+        await Target(commandMock.Object, CancellationToken.None);
 
-        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>()), Times.Never());
+        Fixture.ErrorHandlerMock.Verify(static (handler) => handler.DifferentNumberOfArgumentsAndParameters.Handle(It.IsAny<IHandleDifferentNumberOfArgumentsAndParametersCommand>(), It.IsAny<CancellationToken>()), Times.Never());
 
-        Fixture.PairerMock.Verify(PairArgumentExpression(parameter1, syntacticArgument1), Times.Once());
-        Fixture.PairerMock.Verify(PairArgumentExpression(parameter2, syntacticArgument2), Times.Once());
-        Fixture.PairerMock.Verify(static (handler) => handler.Handle(It.IsAny<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>()), Times.Exactly(2));
+        Fixture.PairerMock.Verify(PairArgumentExpression(parameter1, syntacticArgument1, It.IsAny<CancellationToken>()), Times.Once());
+        Fixture.PairerMock.Verify(PairArgumentExpression(parameter2, syntacticArgument2, It.IsAny<CancellationToken>()), Times.Once());
+        Fixture.PairerMock.Verify(static (handler) => handler.Handle(It.IsAny<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
     }
 
-    private static Expression<Action<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>>> PairArgumentExpression(
+    private static Expression<Func<ICommandHandler<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>>, Task>> PairArgumentExpression(
         ITypeParameterSymbol parameter,
-        TypeSyntax syntacticArgument)
+        TypeSyntax syntacticArgument,
+        CancellationToken cancellationToken)
     {
-        return (handler) => handler.Handle(It.Is(MatchPairArgumentCommand(parameter, syntacticArgument)));
+        return (handler) => handler.Handle(It.Is(MatchPairArgumentCommand(parameter, syntacticArgument)), cancellationToken);
     }
 
     private static Expression<Func<IPairArgumentCommand<ITypeParameter, ICSharpTypeArgumentData>, bool>> MatchPairArgumentCommand(
@@ -110,9 +113,10 @@ public sealed class Handle
         return ReferenceEquals(syntacticArgument, argumentData.SyntacticArgument);
     }
 
-    private void Target(
-        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command)
+    private async Task Target(
+        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command,
+        CancellationToken cancellationToken)
     {
-        Fixture.Sut.Handle(command);
+        await Fixture.Sut.Handle(command, cancellationToken);
     }
 }

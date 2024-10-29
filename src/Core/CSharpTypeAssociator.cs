@@ -14,6 +14,8 @@ using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 /// <summary>Associates syntactic C# type arguments with parameters.</summary>
 public sealed class CSharpTypeAssociator
@@ -33,8 +35,9 @@ public sealed class CSharpTypeAssociator
         ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
     }
 
-    void ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>>.Handle(
-        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command)
+    async Task ICommandHandler<IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData>>.Handle(
+        IAssociateArgumentsCommand<IAssociateCSharpTypeArgumentsData> command,
+        CancellationToken cancellationToken)
     {
         if (command is null)
         {
@@ -43,26 +46,27 @@ public sealed class CSharpTypeAssociator
 
         if (command.Data.Parameters.Count != command.Data.SyntacticArguments.Count)
         {
-            ErrorHandler.DifferentNumberOfArgumentsAndParameters.Handle(HandleDifferentNumberOfArgumentsAndParametersCommand.Instance);
+            await ErrorHandler.DifferentNumberOfArgumentsAndParameters.Handle(HandleDifferentNumberOfArgumentsAndParametersCommand.Instance, cancellationToken).ConfigureAwait(false);
 
             return;
         }
 
         for (var i = 0; i < command.Data.Parameters.Count; i++)
         {
-            PairArgument(command.Data.Parameters[i], command.Data.SyntacticArguments[i]);
+            await PairArgument(command.Data.Parameters[i], command.Data.SyntacticArguments[i], cancellationToken).ConfigureAwait(false);
         }
     }
 
-    private void PairArgument(
+    private async Task PairArgument(
         ITypeParameterSymbol parameterSymbol,
-        TypeSyntax syntacticArgument)
+        TypeSyntax syntacticArgument,
+        CancellationToken cancellationToken)
     {
         var parameter = new TypeParameter(parameterSymbol);
         var argumentData = new CSharpTypeArgumentData(syntacticArgument);
 
         var command = new PairArgumentCommand(parameter, argumentData);
 
-        Pairer.Handle(command);
+        await Pairer.Handle(command, cancellationToken).ConfigureAwait(false);
     }
 }
