@@ -9,7 +9,6 @@ using Paraminter.Associating.CSharp.Type.Corus.Commands;
 using Paraminter.Associating.CSharp.Type.Corus.Errors;
 using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
 using Paraminter.Associating.CSharp.Type.Corus.Models;
-using Paraminter.Cqs;
 using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 

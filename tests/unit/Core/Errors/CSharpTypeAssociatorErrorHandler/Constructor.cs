@@ -3,7 +3,6 @@
 using Moq;
 
 using Paraminter.Associating.CSharp.Type.Corus.Errors.Commands;
-using Paraminter.Cqs;
 
 using System;
 

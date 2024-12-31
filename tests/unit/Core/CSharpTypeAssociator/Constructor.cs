@@ -4,7 +4,6 @@ using Moq;
 
 using Paraminter.Arguments.CSharp.Type.Models;
 using Paraminter.Associating.CSharp.Type.Corus.Errors;
-using Paraminter.Cqs;
 using Paraminter.Pairing.Commands;
 using Paraminter.Parameters.Type.Models;
 
